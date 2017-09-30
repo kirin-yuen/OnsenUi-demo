@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>A Sample App with a Page and Toolbar</title>
+    <link rel="stylesheet" href="https://unpkg.com/onsenui/css/onsenui.css">
+    <link rel="stylesheet" href="https://unpkg.com/onsenui/css/onsen-css-components.min.css">
+    <script src="https://unpkg.com/onsenui/js/onsenui.min.js"></script>
+    <style>
+    .intro {
+        text-align: left;
+        padding: 0 22px;
+        margin-top: 20px;
+        font-size: 14px;
+        line-height: 1.4;
+        color: rgba(0, 0, 0, .54);
+    }
+    </style>
+</head>
+
+<body>
+    <!-- Show first page via ons-navigator page attr, page value can be path or id -->
+    <ons-navigator swipeable id="myNavigator" page="./views/page1.html"></ons-navigator>
+    <!--  Template must be given a unique ID that will be used later on to reference the template, Templates can be defined in two different ways: -->
+    <!-- 1. Using <ons-template> element in main page, and native <template> is preferred since v2.4.0 -->
+    <ons-template id="page2.html">
+        <ons-page id="page2">
+            <ons-toolbar>
+                <div class="left">
+                    <ons-back-button>Page 1</ons-back-button>
+                </div>
+                <div class="center">Managing Pages</div>
+            </ons-toolbar>
+            <p class="intro">Onsen UI can be achieved by defining multiple ons-page components.</p>
+            <ons-card>
+                <div class="title">A template must be given a unique ID that will be used later on to reference the template</div>
+                <ons-list>
+                    <ons-list-header>Templates can be defined in two different ways</ons-list-header>
+                    <ons-list-item>Separate files: *.html files that contain a single ons-page component as the root.</ons-list-item>
+                    <ons-list-item>Using &lt;template&gt; elements inside index.html</ons-list-item>
+                </ons-list>
+            </ons-card>
+
+            <ons-card>
+                <div class="title">
+                    Onsen UI has 3 components that are used to manage multiple pages: ons-navigator, ons-tabbar and ons-splitter.
+                </div>
+                <ons-list>
+                    <ons-list-header>Navigator</ons-list-header>
+                    <ons-list-item>If the app contains multiple pages in <b>a hierarchical order</b>, consider using the navigator component. It provides a page stack where you can push and pop pages with transition animations</ons-list-item>
+                    <ons-list-header>Tab Bar</ons-list-header>
+                    <ons-list-item>If the app contains multiple pages at <b>the same level</b>, a tab bar is the appropriate choice. Users can pick which page to display by tapping the item on the tab.</ons-list-item>
+                    <ons-list-header>Splitter</ons-list-header>
+                    <ons-list-item>Although it is named a splitter, small devices will create a side menu which can be shown/hidden by the user interaction. On larger screens, this will split a single page into two. </ons-list-item>
+                </ons-list>
+
+            </ons-card>
+                <p class="intro">
+                    These three component are composable, meaning that you can combine them to achieve the desired routing for your specific app.
+                </p>
+        </ons-page>
+    </ons-template>
+    <script>
+    document.addEventListener('init', function(event) {
+        var page = event.target;
+
+        console.dir(event.target)
+        if (page.id === 'page1') {
+            page.querySelector('#push-button').onclick = function() {
+                // push a context to page2
+                document.querySelector('#myNavigator').pushPage('page2.html', { data: { title: 'Templates' } });
+            };
+        } else if (page.id === 'page2') {
+            // manipulate dom via the context
+            page.querySelector('ons-toolbar .center').innerHTML = page.data.title;
+        }
+    });
+    </script>
+</body>
+
+</html>
