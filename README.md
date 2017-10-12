@@ -1,40 +1,32 @@
-### Onsen UI 提供3种元素用来组合列表
+### Splitter 分割菜单
+可配置为`分割(split mode)`或者`折叠模式(collapse mode)`
 ```html
-<ons-list> <!-- 父元素 -->
-<ons-list-header> <!-- 子元素，一个list可以有多个header -->
-<ons-list-item> <!-- 子元素 -->
+<ons-splitter> <!-- 父元素，容器-->
+<ons-splitter-side> <!-- 子元素，侧边菜单内容 ，左右均可-->
+<ons-splitter-content> <!-- 子元素，显示主要内容，应使用ons-page作为根容器-->
 ```
 
 ### 结构
-* 简易方式
 ```html
-<ons-list-item>Alice</ons-list-item> <!-- 包含单一文本 -->
-渲染成
-<div class="center list-item__center">Alice</div>
-```
-* 三部分方式
-```html
-<ons-list-item>
-  <div class="left">
-    <ons-icon icon="md-face" class="list-item__icon"></ons-icon>
-  </div>
-  <div class="center">
-    Icon and switch
-  </div>
-  <div class="right">
-    <ons-switch></ons-switch>
-  </div>
-</ons-list-item>
+<ons-splitter>
+  <ons-splitter-side></ons-splitter-side>
+  <ons-splitter-content></ons-splitter-content>
+</ons-splitter>
 ```
 
-* 组件属性，所有组件都会有属性，其中`modifier属性`用于处理组件显示方式，使用多个需要用空格分割
 
-特别举例
-#### ons-list-item
-  * **tappable属性**，让item点击带效果
-  * **tap-background-color属性**，让item点击带颜色反馈，android不适用
-  * **modifier属性**
-      * **tappable**：让item点击有效果，建议使用`attribute的tappable`(因android没效果)
-      * **chevron**：item右侧有V形图标，一般搭配attribute的tappable使用
-      * **material**：变成安卓material风格，但没ripple效果
+#### ons-splitter-side
+已试用属性
+* **collapse**：控制菜单是否折叠，不加则是`展开状态`
+  * **portrait**：竖屏时折叠
+  * **landscape**：横屏时折叠
+  * **'媒体查询范围'**：当媒体查询返回true则处于折叠状态
+    ```html
+      <v-ons-splitter-side collapse="screen and (max-width:768px)"></v-ons-splitter-side>
+    ```
+* **swipe-target-width**：边距多少开始可以滑动
+* **animationOptions**：无法使用
+* **open-threshold**：滑动多少才可以将菜单呼出，值0-1，1是滑多少都会折叠回去
+* **width**：菜单宽度
+
     
