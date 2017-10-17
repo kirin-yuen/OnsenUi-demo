@@ -1,32 +1,57 @@
-### Splitter 分割菜单
-可配置为`分割(split mode)`或者`折叠模式(collapse mode)`
-```html
-<ons-splitter> <!-- 父元素，容器-->
-<ons-splitter-side> <!-- 子元素，侧边菜单内容 ，左右均可-->
-<ons-splitter-content> <!-- 子元素，显示主要内容，应使用ons-page作为根容器-->
-```
+### Navigator 导航
+ons-navigator元素处理页面堆叠，利用转场动画在当前页之上推送导航页，这是移动端导航的常用方式。
 
 ### 结构
+首页指向`id为page2.html`的模板，page也可`指向路径`
 ```html
-<ons-splitter>
-  <ons-splitter-side></ons-splitter-side>
-  <ons-splitter-content></ons-splitter-content>
-</ons-splitter>
+<ons-navigator page="page2.html"></ons-navigator>
+```
+
+模板
+```html
+<ons-template id="page2.html">
+  <ons-page>
+    ...
+  </ons-page>
+</ons-template>
+```
+
+### ons-navigator
+已试用**属性**
+
+* **page**：首页指向，可以是ons-template的id或者路径
+* **animation**：转场动画可选`fade` `lift` `slide` `none`
+```html
+<ons-navigator animation="fade"></ons-navigator>
+```
+注意：ios添加的`swipeable`滑动返回上页效果，在android已移除，除非加上`swipeable="force"`
+
+* **swipeable**：启用ios的滑动返回功能
+* **swipe-target-width**：距离边缘多少滑动才生效
+* **swipe-threshold**：滑动超过多少比例才返回上页，0-1
+* **animation-options**：动画效果参数，表达式
+```html
+<ons-navigator animation-options="{duration: 1, delay: 1, timing: 'ease-in'}"></ons-navigator>
 ```
 
 
-#### ons-splitter-side
-已试用属性
-* **collapse**：控制菜单是否折叠，不加则是`展开状态`
-  * **portrait**：竖屏时折叠
-  * **landscape**：横屏时折叠
-  * **'媒体查询范围'**：当媒体查询返回true则处于折叠状态
-    ```html
-      <v-ons-splitter-side collapse="screen and (max-width:768px)"></v-ons-splitter-side>
-    ```
-* **swipe-target-width**：边距多少开始可以滑动
-* **animationOptions**：无法使用
-* **open-threshold**：滑动多少才可以将菜单呼出，值0-1，1是滑多少都会折叠回去
-* **width**：菜单宽度
 
-    
+已试用**方法**
+* **pushPage(page, [options])**：推送页面到页面堆中，push返回promise对象供链式调用，推送的参数可以通过`topPage`进行获取
+```js
+myNavigator
+  .pushPage('page2.html', {data: { title: 'title here'}})
+  .then(function(currentPage) {
+    ons.notification.alert('Page pushed!');
+    alert(myNavigator.topPage.data.title); // title here
+  });
+```
+
+* **popPage(options)**：返回上一页，或者使用`<ons-back-button>`，按钮会找到navigator然后出发popPage方法
+```js
+myNavigator
+  .popPage()  
+```
+
+
+参考自[ons-navigator](https://onsen.io/v2/api/js/ons-navigator.html)

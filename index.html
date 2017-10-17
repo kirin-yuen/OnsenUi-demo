@@ -20,7 +20,7 @@
 
 <body>
     <!-- Show first page via ons-navigator page attr, page value can be path or id -->
-    <ons-navigator swipeable id="myNavigator" page="./views/page1.html"></ons-navigator>
+    <ons-navigator swipe-threshold="0.5" swipe-target-width="50" swipeable id="myNavigator" page="./views/page1.html" animation-options="{duration: 1, delay: 1, timing: 'ease-in'}" animation="slide"></ons-navigator>
     <!--  Template must be given a unique ID that will be used later on to reference the template, Templates can be defined in two different ways: -->
     <!-- 1. Using <ons-template> element in main page, and native <template> is preferred since v2.4.0 -->
     <ons-template id="page2.html">
@@ -32,47 +32,36 @@
                 <div class="center">Managing Pages</div>
             </ons-toolbar>
             <p class="intro">Onsen UI can be achieved by defining multiple ons-page components.</p>
-            <ons-card>
-                <div class="title">A template must be given a unique ID that will be used later on to reference the template</div>
-                <ons-list>
-                    <ons-list-header>Templates can be defined in two different ways</ons-list-header>
-                    <ons-list-item>Separate files: *.html files that contain a single ons-page component as the root.</ons-list-item>
-                    <ons-list-item>Using &lt;template&gt; elements inside index.html</ons-list-item>
-                </ons-list>
-            </ons-card>
-
-            <ons-card>
-                <div class="title">
-                    Onsen UI has 3 components that are used to manage multiple pages: ons-navigator, ons-tabbar and ons-splitter.
-                </div>
-                <ons-list>
-                    <ons-list-header>Navigator</ons-list-header>
-                    <ons-list-item>If the app contains multiple pages in <b>a hierarchical order</b>, consider using the navigator component. It provides a page stack where you can push and pop pages with transition animations</ons-list-item>
-                    <ons-list-header>Tab Bar</ons-list-header>
-                    <ons-list-item>If the app contains multiple pages at <b>the same level</b>, a tab bar is the appropriate choice. Users can pick which page to display by tapping the item on the tab.</ons-list-item>
-                    <ons-list-header>Splitter</ons-list-header>
-                    <ons-list-item>Although it is named a splitter, small devices will create a side menu which can be shown/hidden by the user interaction. On larger screens, this will split a single page into two. </ons-list-item>
-                </ons-list>
-
-            </ons-card>
-                <p class="intro">
-                    These three component are composable, meaning that you can combine them to achieve the desired routing for your specific app.
-                </p>
+            
+            <p class="intro">
+                These three component are composable, meaning that you can combine them to achieve the desired routing for your specific app.
+            </p>
+            <ons-button>Back</ons-button>
         </ons-page>
     </ons-template>
     <script>
     document.addEventListener('init', function(event) {
         var page = event.target;
 
-        console.dir(event.target)
         if (page.id === 'page1') {
             page.querySelector('#push-button').onclick = function() {
-                // push a context to page2
-                document.querySelector('#myNavigator').pushPage('page2.html', { data: { title: 'Templates' } });
+                // In Onsen UI all such methods like pushPage are attached to the element 
+                document.querySelector('#myNavigator').pushPage('page2.html', { data: { title: 'Title changed by topPage...' } })
+                    // The method returns a Promise object
+                    .then(function(currentPage) {
+                        // get the pushPage options.data from myNavigator.topPage.data
+                        currentPage.querySelector('ons-toolbar .center').innerHTML = document.querySelector('#myNavigator').topPage.data.title;
+                        alert('Page pushed...');
+                        console.dir(document.querySelector('#myNavigator'))
+                        return currentPage;
+                    }).then(function(currentPage){
+                        currentPage.querySelector('ons-button').onclick = function() {
+                            document.querySelector('#myNavigator').popPage().then(function(currentPage){
+                                console.log(currentPage);
+                            });
+                        }
+                    });
             };
-        } else if (page.id === 'page2') {
-            // manipulate dom via the context
-            page.querySelector('ons-toolbar .center').innerHTML = page.data.title;
         }
     });
     </script>
